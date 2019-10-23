@@ -33,6 +33,16 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="About">About</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
+                    <li><a asp-area="" asp-controller="Songs" asp-action="Index">Songs Menu</a></li>
+
+
+                    <!--    The Html.ActionLink(string linkText, string actionName, string ControllerName)  -->
+         <!-- The linkText is what shows on the WebPage as a Menu Item  -->
+           <!-- actionName is the    -->
+
+      
+                    <li>@Html.ActionLink("Song Menu2", "Index", "Songs")</li>
+                    <li>@Html.ActionLink("Privacy Statement", "Privacy", "Home")</li>
                 </ul>
                 <partial name="_LoginPartial" />
             </div>
