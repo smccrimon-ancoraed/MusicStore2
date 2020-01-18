@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Security.Policy;
+using System.Security.Claims;
+using System.Security.Principal;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +16,8 @@ using Microsoft.EntityFrameworkCore;
 using MusicStore1.Data;
 using MusicStore1.Models;
 
+
+       
 namespace MusicStore1.Controllers
 {
     public class SongsController : Controller
@@ -18,18 +25,35 @@ namespace MusicStore1.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IHostingEnvironment _env;
 
+
         public SongsController(ApplicationDbContext context, IHostingEnvironment env)
         {
             _context = context;
             _env = env;
         }
 
+        [AllowAnonymous]
         // GET: Songs
-        public async Task<IActionResult> Index()
+        // Search method by Title, Artist, Album, or Genre
+        // Adopted by Rick Anderson, Microsoft ASP.NET Core MVC app
+        public async Task<IActionResult> Index(string searchString)
         {
-            return View(await _context.Song.ToListAsync());
+            var songs = from m in _context.Song
+                        select m;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                songs = songs.Where(s => s.Title.Contains(searchString)
+                || s.Album.Contains(searchString)
+                || s.Artist.Contains(searchString)
+                || s.Genre.Contains(searchString));
+            }
+
+            return View(await songs.ToListAsync());
         }
 
+
+        [AllowAnonymous]
         // GET: Songs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -48,12 +72,14 @@ namespace MusicStore1.Controllers
             return View(song);
         }
 
+        [AllowAnonymous]
         // GET: Songs/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        [AllowAnonymous]
         // POST: Songs/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -81,6 +107,7 @@ namespace MusicStore1.Controllers
         }
 
         // GET: Songs/Edit/5
+        [Authorize(Roles = "Administrator,Manager")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -96,6 +123,7 @@ namespace MusicStore1.Controllers
             return View(song);
         }
 
+        [Authorize(Roles = "Administrator,Manager")]
         // POST: Songs/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -142,6 +170,9 @@ namespace MusicStore1.Controllers
             return View(song);
         }
 
+
+
+        [Authorize(Roles = "Administrator")]
         // GET: Songs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -161,6 +192,7 @@ namespace MusicStore1.Controllers
         }
 
         // POST: Songs/Delete/5
+        [Authorize(Roles = "Administrator")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -174,6 +206,12 @@ namespace MusicStore1.Controllers
         private bool SongExists(int id)
         {
             return _context.Song.Any(e => e.ID == id);
+        }
+
+
+        public ActionResult Identity()
+        {
+            return Content("Testing we are using Identity");
         }
     }
 }

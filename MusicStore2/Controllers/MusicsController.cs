@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +11,7 @@ using MusicStore1.Models;
 
 namespace MusicStore2.Controllers
 {
+   
     public class MusicsController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -43,12 +45,14 @@ namespace MusicStore2.Controllers
             return View(music);
         }
 
+        [Authorize(Roles = "Administrator, Manager")]
         // GET: Musics/Create
         public IActionResult Create()
         {
             return View();
         }
 
+        [Authorize(Roles = "Administrator, Manager")]
         // POST: Musics/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -65,6 +69,7 @@ namespace MusicStore2.Controllers
             return View(music);
         }
 
+        [Authorize(Roles = "Administrator, Manager")]
         // GET: Musics/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
@@ -81,6 +86,7 @@ namespace MusicStore2.Controllers
             return View(music);
         }
 
+        [Authorize(Roles = "Administrator, Manager")]
         // POST: Musics/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -116,6 +122,7 @@ namespace MusicStore2.Controllers
             return View(music);
         }
 
+        [Authorize(Roles = "Administrator, Manager")]
         // GET: Musics/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -134,6 +141,7 @@ namespace MusicStore2.Controllers
             return View(music);
         }
 
+        [Authorize(Roles = "Administrator, Manager")]
         // POST: Musics/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

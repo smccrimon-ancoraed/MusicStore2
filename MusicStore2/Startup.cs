@@ -34,13 +34,32 @@ namespace MusicStore1
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            // Added Role services .AddRoles<IdentityRole>() to services Add Default Identity
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>()
+                .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .AddRazorPagesOptions(options =>
+                {
+                    options.Conventions.AuthorizePage("/Contact");
+                    options.Conventions.AuthorizeFolder("/Private");
+                    options.Conventions.AllowAnonymousToPage("/Private/PublicPage");
+                    options.Conventions.AllowAnonymousToFolder("/Private/PublicPages");
+                })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            // Allows for Policies to be applied using the Policy property
+            // In an Action/Method [Authorize(Policy = "RequireAdministratorRole")]
+            // 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RequireAdministratorRole",
+                     policy => policy.RequireRole("Administrator","Manager"));
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -62,6 +81,7 @@ namespace MusicStore1
             app.UseCookiePolicy();
 
             app.UseAuthentication();
+
 
             
             app.UseMvc(routes =>

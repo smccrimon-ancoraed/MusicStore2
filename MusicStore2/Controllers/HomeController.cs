@@ -3,14 +3,19 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MusicStore1.Data;
 using MusicStore1.Models;
 
 namespace MusicStore1.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
+        // Add user manager support
+        private readonly UserManager<IdentityUser> userManager;
 
         private readonly ApplicationDbContext _context;
 
@@ -22,10 +27,12 @@ namespace MusicStore1.Controllers
         }
 
 
-        //
+        // SEM 2020-01-11 Modified query to match IsActive && IsFeatured
+        // Bug fix, IsActive = False, and IsFeatured = displayed
         public IActionResult Index()
         {
-            return View(_context.Song.Where(m => m.IsFeatured).ToList());
+            return View(_context.Song.Where(m => m.IsFeatured
+             && m.IsActive).ToList());
         }
 
         //

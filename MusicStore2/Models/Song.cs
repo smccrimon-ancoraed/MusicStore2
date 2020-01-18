@@ -30,7 +30,10 @@ namespace MusicStore1.Models
         [Required]
         [Column(TypeName = "decimal(18,2)")]
         public decimal Price { get; set; }
+
+        [Display(Name = "Active")]
         public bool IsActive { get; set;  }
+        [Display(Name = "Featured")]
         public bool IsFeatured { get; set; }
 
     }
