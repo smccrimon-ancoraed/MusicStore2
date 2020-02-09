@@ -1,5 +1,14 @@
 ﻿@model MusicStore1.Models.Song
 
+@{  string basefile = "* No image*";}
+@if (Model.ImagePath != null)
+
+    { basefile = Model.ImagePath.Substring((Model.ImagePath.LastIndexOf('/')+1)); }
+    
+else
+{
+    { basefile = "* No image*"; }
+}
 @{
     ViewData["Title"] = "Details";
 }
@@ -44,11 +53,13 @@
             @Html.DisplayNameFor(model => model.ImagePath)
         </dt>
         <dd>
-            <img src="../../@Html.DisplayFor(model => model.ImagePath )" height="25%" width="25%" />
-
+            @if (Model.ImagePath != null)
+            {
+                <img src="../../@Html.DisplayFor(model => model.ImagePath )" height="25%" width="25%" />
+            }
         </dd>
         <dd>
-            @Html.DisplayFor(model => model.ImagePath)
+            @basefile
         </dd>
         <dt>
             @Html.DisplayNameFor(model => model.Price)

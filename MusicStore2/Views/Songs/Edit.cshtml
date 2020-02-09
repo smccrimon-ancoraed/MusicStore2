@@ -41,6 +41,7 @@
             <div class="form-group">
                 <label asp-for="ImagePath" class="control-label"></label>
                 <input type="hidden" asp-for="ImagePath" />
+                <img src="../../@Html.DisplayFor(model => model.ImagePath )" height="25%" width="25%" />
                 <input type="file" name="file" class="form-control" />
 
             </div>
