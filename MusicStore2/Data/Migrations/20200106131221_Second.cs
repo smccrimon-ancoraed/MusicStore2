@@ -6,6 +6,8 @@ namespace MusicStore1.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+        
+            /*
             migrationBuilder.AlterColumn<string>(
                 name: "Title",
                 table: "Song",
@@ -34,6 +36,7 @@ namespace MusicStore1.Data.Migrations
                 oldClrType: typeof(string),
                 oldNullable: true);
 
+    */
             migrationBuilder.AddColumn<bool>(
                 name: "IsActive",
                 table: "Song",
@@ -46,6 +49,7 @@ namespace MusicStore1.Data.Migrations
                 nullable: false,
                 defaultValue: false);
 
+            /*
             migrationBuilder.AlterColumn<string>(
                 name: "Title",
                 table: "Music",
@@ -66,6 +70,7 @@ namespace MusicStore1.Data.Migrations
                 nullable: false,
                 oldClrType: typeof(string),
                 oldNullable: true);
+                */
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -8,6 +8,7 @@ namespace MusicStore1.Data.Migrations
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            return;
             migrationBuilder.CreateTable(
                 name: "Music",
                 columns: table => new

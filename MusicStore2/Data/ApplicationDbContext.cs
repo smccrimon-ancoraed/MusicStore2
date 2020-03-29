@@ -14,6 +14,7 @@ namespace MusicStore1.Data
         {
         }
         public DbSet<MusicStore1.Models.Music> Music { get; set; }
-        public DbSet<MusicStore1.Models.Song> Song { get; set; }
+        public DbSet<Song> Song { get; set; }
+        public DbSet<Customer> Customers { get; set; }
     }
 }

@@ -32,7 +32,7 @@ namespace MusicStore1.Controllers
             _env = env;
         }
 
-        [AllowAnonymous]
+      
         // GET: Songs
         // Search method by Title, Artist, Album, or Genre
         // Adopted by Rick Anderson, Microsoft ASP.NET Core MVC app
@@ -41,19 +41,24 @@ namespace MusicStore1.Controllers
             var songs = from m in _context.Song
                         select m;
 
+            var customers = from mc in _context.Customers
+                        select mc;
+
             if (!String.IsNullOrEmpty(searchString))
             {
-                songs = songs.Where(s => s.Title.Contains(searchString)
+                songs = songs.Where(s => (s.Title.Contains(searchString)
                 || s.Album.Contains(searchString)
                 || s.Artist.Contains(searchString)
-                || s.Genre.Contains(searchString));
+                || s.Genre.Contains(searchString))
+                && s.IsActive
+                );
             }
 
             return View(await songs.ToListAsync());
         }
 
 
-        [AllowAnonymous]
+   
         // GET: Songs/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -72,14 +77,14 @@ namespace MusicStore1.Controllers
             return View(song);
         }
 
-        [AllowAnonymous]
+
         // GET: Songs/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        [AllowAnonymous]
+   
         // POST: Songs/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -107,7 +112,7 @@ namespace MusicStore1.Controllers
         }
 
         // GET: Songs/Edit/5
-        [Authorize(Roles = "Administrator,Manager")]
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -123,7 +128,8 @@ namespace MusicStore1.Controllers
             return View(song);
         }
 
-        [Authorize(Roles = "Administrator,Manager")]
+
+       // [Authorize(Roles = "Administrator,Manager")]
         // POST: Songs/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
@@ -172,7 +178,7 @@ namespace MusicStore1.Controllers
 
 
 
-        [Authorize(Roles = "Administrator")]
+
         // GET: Songs/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -192,7 +198,7 @@ namespace MusicStore1.Controllers
         }
 
         // POST: Songs/Delete/5
-        [Authorize(Roles = "Administrator")]
+
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
